@@ -251,29 +251,33 @@
 
         <!-- Research Metrics Section -->
 	<section id="publications" class="section bg-light">
-    	<div class="container">
-        <div class="row g-4 mb-5" id="metrics-container">
-            <div class="col-md-4 text-center">
-                <div class="metric-card">
-                    <div class="metric-value" id="total-citations">---</div>
-                    <div class="metric-label">Total Citations</div>
+        <div class="container">
+            <div class="row g-4 mb-5" id="metrics-container">
+                <div class="col-md-4 text-center">
+                    <div class="metric-card">
+                        <div class="metric-value" id="total-citations">---</div>
+                        <div class="metric-label">Total Citations</div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="metric-card">
+                        <div class="metric-value" id="num-publications">--</div>
+                        <div class="metric-label">Number of Publications</div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="metric-card">
+                        <div class="metric-value" id="h-index">--</div>
+                        <div class="metric-label">h-index</div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 text-center">
-                <div class="metric-card">
-                    <div class="metric-value" id="num-publications">--</div>
-                    <div class="metric-label">Number of Publications</div>
-                </div>
-            </div>
-            <div class="col-md-4 text-center">
-                <div class="metric-card">
-                    <div class="metric-value" id="h-index">--</div>
-                    <div class="metric-label">h-index</div>
-                </div>
+            <div class="citation-chart">
+                <canvas id="publicationsChart"></canvas>
             </div>
         </div>
-        </div>
-	</section>
+    </section>
+
 
 
         <section id="blog" class="section">
