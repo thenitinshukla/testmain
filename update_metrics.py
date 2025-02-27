@@ -20,8 +20,9 @@ def get_google_scholar_metrics(user_id):
         publication_elements = soup.find_all("td", class_="gsc_rsb_std")
         publications = publication_elements[1].text if len(publication_elements) > 1 else "N/A"
 
-        h_index_element = soup.find("a", class_="gsc_rsb_aa")
-        h_index = h_index_element.text if h_index_element else "N/A"
+        # Corrected h-index extraction
+        h_index_element = soup.find_all("td", class_="gsc_rsb_std")
+        h_index = h_index_element[2].text if len(h_index_element) > 2 else "N/A"
 
         citations_per_year = get_citations_per_year(soup)
 
