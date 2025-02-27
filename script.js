@@ -48,71 +48,58 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, 1000);
     }
+});
 
-    // Fetch and display metrics
+
+document.addEventListener("DOMContentLoaded", function() {
     fetch('metrics.json')
         .then(response => response.json())
         .then(data => {
+            // Update metric values
             document.getElementById('total-citations').textContent = data.citations;
             document.getElementById('num-publications').textContent = data.publications;
             document.getElementById('h-index').textContent = data.h_index;
 
-            // Create citation chart (histogram)
-            if (data.citations_per_year) {
-                const ctx = document.getElementById('publicationsChart').getContext('2d');
-                const citationYears = Object.keys(data.citations_per_year);
-                const citationCounts = Object.values(data.citations_per_year);
+            // Prepare data for chart
+            const years = Object.keys(data.citations_per_year);
+            const citationCounts = Object.values(data.citations_per_year);
 
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: citationYears,
-                        datasets: [{
-                            label: 'Citations per Year',
-                            data: citationCounts,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Number of Citations'
-                                },
-                                ticks: {
-                                    stepSize: 1,
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Year'
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
+            // Create chart
+            const ctx = document.getElementById('publicationsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Citations Per Year',
+                        data: citationCounts,
+                        borderColor: 'blue',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'blue'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
                             title: {
                                 display: true,
-                                text: 'Citations per Year',
-                                font: {
-                                    size: 16
-                                }
+                                text: 'Year'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Citations'
                             }
                         }
                     }
-                });
-            } else {
-                console.log("citations_per_year data not found in metrics.json");
-            }
+                }
+            });
         })
-        .catch(error => console.error('Error fetching metrics:', error));
+        .catch(error => console.error('Error loading metrics:', error));
 });
