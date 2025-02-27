@@ -1,0 +1,60 @@
+name: Update Metrics and Deploy Site
+
+on:
+  push:
+    branches:
+      - testmain
+  pull_request:
+    branches:
+      - testmain
+  schedule:
+    - cron: '0 0 * * 0'  # Runs weekly on Sundays at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Create and activate virtual environment
+      run: |
+        python -m venv myenv
+        echo "VIRTUAL_ENV=$GITHUB_WORKSPACE/myenv" >> $GITHUB_ENV
+        echo "$GITHUB_WORKSPACE/myenv/bin" >> $GITHUB_PATH
+
+    - name: Install Python dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Update metrics
+      run: |
+        myenv/bin/python update_metrics.py
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7'
+        bundler-cache: true
+
+    - name: Install Ruby dependencies
+      run: |
+        bundle install
+
+    - name: Build site
+      run: |
+        bundle exec jekyll build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
+        publish_branch: gh-pages
